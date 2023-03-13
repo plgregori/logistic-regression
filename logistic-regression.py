@@ -240,4 +240,4 @@ plt.show()
 
 # The sintax is straightforward. It's also a good example on how to plot multiple functions with plt.plot and label them.
 # We cannot see it, but the result is that for very small learning rate, the cost decreases very slowly.
-# For very high learning rate, the cost oscillates (even though in this specific case it then converges to a small value)
+# For very high learning rate, the cost oscillates (even though in this specific case it then converges to a small value)gi
