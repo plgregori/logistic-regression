@@ -2,9 +2,14 @@
 # The goal is to train an algorithm to recognize pictures of cats
 
 import numpy as np
-import h5py
-import matplotlib.pyplot as plt
 import copy
+import matplotlib.pyplot as plt
+import h5py
+import scipy
+from PIL import Image
+from scipy import ndimage
+from lr_utils import load_dataset
+from public_tests import *
 
 # h5py is a package for interacting with a dataset stored in an .h5 file
 # matplotlib is a package for plotting graphs.
@@ -25,6 +30,7 @@ train_set_x_orig, train_set_y, test_set_x_orig, test_set_y, classes = load_datas
 index = 10
 plt.imshow(train_set_x_orig[index])
 print ("y = " + str(train_set_y[:, index]) + ", it's a '" + classes[np.squeeze(train_set_y[:, index])].decode("utf-8") +  "' picture.")
+plt.show()
 
 # With the index specification, the picture is chosen
 # plt.imshow shows the picture with number 'index' from train_set_x_orig
@@ -72,9 +78,7 @@ def initialize_with_zeros(dim):
     return w, b
 
 # Note that the two parameters are an (m,1) vertical array w and a float b as wanted.
-# To check if some variable you are using is of the correct type, you can use assert. For example:
-
-assert type(b) == float
+# To check if some variable you are using is of the correct type, you can use assert. For example: assert type(b) == float
 
 # We can now define a function that from parameters w and b, and data X and Y, defines the cost function and its derivatives
 
@@ -88,7 +92,7 @@ def propagate(w, b, X, Y):
     dw = (1/m)*np.dot(X,A.T-Y.T)
     db = (1/m)*np.sum(A-Y)
     
-    cost = np.squeeze(np.array(cost))
+    cost = np.squeeze(cost)
 
     grads = {"dw": dw,
              "db": db}
@@ -121,7 +125,7 @@ def optimize(w, b, X, Y, num_iterations=100, learning_rate=0.009, print_cost=Fal
         
         if i % 100 == 0:
             costs.append(cost)
-        
+            
             if print_cost:
                 print ("Cost after iteration %i: %f" %(i, cost))
     
@@ -199,13 +203,14 @@ logistic_regression_model = model(train_set_x, train_set_y, test_set_x, test_set
 
 # We can now check the results of our model. For example, we print a picture from the test dataset and the result of our prediction:
 
-index = 1
+index = 3
 plt.imshow(test_set_x[:, index].reshape((num_px, num_px, 3)))
 print ("y = " + str(test_set_y[0,index]) + ", you predicted that it is a \"" + classes[int(logistic_regression_model['Y_prediction_test'][0,index])].decode("utf-8") +  "\" picture.")
+plt.show()
 
 # We can also plot the cost function:
 
-costs = np.squeeze(logistic_regression_model['costs'])
+costs = logistic_regression_model["costs"]
 plt.plot(costs)
 plt.ylabel('cost')
 plt.xlabel('iterations (per hundreds)')
@@ -240,4 +245,4 @@ plt.show()
 
 # The sintax is straightforward. It's also a good example on how to plot multiple functions with plt.plot and label them.
 # We cannot see it, but the result is that for very small learning rate, the cost decreases very slowly.
-# For very high learning rate, the cost oscillates (even though in this specific case it then converges to a small value)gi
+# For very high learning rate, the cost oscillates (even though in this specific case it then converges to a small value).
