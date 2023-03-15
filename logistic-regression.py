@@ -197,7 +197,7 @@ def model(X_train, Y_train, X_test, Y_test, num_iterations=2000, learning_rate=0
 
 logistic_regression_model = model(train_set_x, train_set_y, test_set_x, test_set_y, num_iterations=2000, learning_rate=0.005, print_cost=True)
 
-# This cannot be seen here, but it turns out the train accuracy is close to 100%. This should always be the case.
+# It turns out the train accuracy is close to 100%. This should always be the case.
 # The test accuracy is 70%, which is ok for a simple model with a small dataset.
 # The model is overfitting the training data: this means it follows the training data too closely, and doesn't do well with new test data.
 
@@ -217,7 +217,7 @@ plt.xlabel('iterations (per hundreds)')
 plt.title("Learning rate =" + str(logistic_regression_model["learning_rate"]))
 plt.show()
 
-# We cannot show it here, but the cost is decreasing at each iteration, which means the model is learning. 
+# The cost is decreasing at each iteration, which means the model is learning. 
 # The cost does not reach zero. We can get closer to zero by increasing the number of iterations.
 # This will make the training set accuracy go up, but the test set accuracy will go down: overfitting!
 
@@ -244,5 +244,21 @@ frame.set_facecolor('0.90')
 plt.show()
 
 # The sintax is straightforward. It's also a good example on how to plot multiple functions with plt.plot and label them.
-# We cannot see it, but the result is that for very small learning rate, the cost decreases very slowly.
+# The result is that for very small learning rate, the cost decreases very slowly.
 # For very high learning rate, the cost oscillates (even though in this specific case it then converges to a small value).
+
+#We can now test the algorithm for an arbitrary image:
+
+my_image = "my_image.jpg"   
+
+# We preprocess the image to fit the algorithm, then apply logistic regression:
+
+fname = "images/" + my_image
+image = np.array(Image.open(fname).resize((num_px, num_px)))
+plt.imshow(image)
+plt.show()
+image = image / 255.
+image = image.reshape((1, num_px * num_px * 3)).T
+my_predicted_image = predict(logistic_regression_model["w"], logistic_regression_model["b"], image)
+
+print("y = " + str(np.squeeze(my_predicted_image)) + ", your algorithm predicts a \"" + classes[int(np.squeeze(my_predicted_image)),].decode("utf-8") +  "\" picture.")
